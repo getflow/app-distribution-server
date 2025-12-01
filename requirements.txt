@@ -48,7 +48,7 @@ executing==2.1.0
     # via stack-data
 fastapi==0.115.6
     # via -r requirements.in
-fonttools==4.55.3
+fonttools==4.61.0
     # via matplotlib
 frida==16.5.9
     # via androguard
