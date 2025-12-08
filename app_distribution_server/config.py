@@ -5,6 +5,7 @@ from app_distribution_server.logger import logger
 STORAGE_URL = os.getenv("STORAGE_URL", "osfs://./uploads")
 
 UPLOADS_SECRET_AUTH_TOKEN = os.getenv("UPLOADS_SECRET_AUTH_TOKEN")
+USER_CREDENTIALS_PATH = os.getenv("USER_CREDENTIALS_PATH")
 
 if not UPLOADS_SECRET_AUTH_TOKEN:
     UPLOADS_SECRET_AUTH_TOKEN = "secret"  # noqa: S105

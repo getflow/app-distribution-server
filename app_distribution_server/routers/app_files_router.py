@@ -1,7 +1,7 @@
 from typing import Literal
 from urllib.parse import quote
 
-from fastapi import APIRouter, Request, Response
+from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
@@ -11,11 +11,14 @@ from app_distribution_server.build_info import (
 from app_distribution_server.config import (
     get_absolute_url,
 )
+from app_distribution_server.security.basic_auth import USER_CREDENTIALS_PATH, BasicAuth
 from app_distribution_server.storage import (
     get_upload_asserted_platform,
     load_app_file,
     load_build_info,
 )
+
+auth_dependency = Depends(BasicAuth()) if USER_CREDENTIALS_PATH else None
 
 router = APIRouter(tags=["App files"])
 
@@ -57,6 +60,7 @@ async def get_item_plist(
 async def get_app_file(
     upload_id: str,
     file_type: Literal["ipa", "apk"],
+    _=auth_dependency,
 ) -> Response:
     expected_platform = Platform.ios if file_type == "ipa" else Platform.android
     get_upload_asserted_platform(upload_id, expected_platform=expected_platform)

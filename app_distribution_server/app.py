@@ -7,6 +7,7 @@ from fastapi.responses import PlainTextResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.status import HTTP_401_UNAUTHORIZED
 
 from app_distribution_server.config import (
     APP_TITLE,
@@ -57,6 +58,11 @@ async def exception_handler(
 ) -> Response:
     if request.url.path.startswith("/api/"):
         return PlainTextResponse(content=exception.detail)
+
+    if exception.status_code == HTTP_401_UNAUTHORIZED:
+        return PlainTextResponse(
+            content=exception.detail, headers=exception.headers, status_code=exception.status_code
+        )
 
     return await html_router.render_error_page(request, exception)
 
